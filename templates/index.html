@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Facial Emotion & Depression Detection</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #e0e0e0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1200px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .header h1 {
+        color: #1a1a1a;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .header p {
+        color: #8b4513;
+        font-size: 1.1em;
+      }
+
+      .main-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      @media (max-width: 968px) {
+        .main-content {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* Neumorphism Card */
+      .card {
+        background: #e0e0e0;
+        border-radius: 30px;
+        padding: 30px;
+        box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+      }
+
+      .card-title {
+        color: #1a1a1a;
+        font-size: 1.5em;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      /* Video Container */
+      .video-container {
+        position: relative;
+        width: 100%;
+        background: #1a1a1a;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: inset 8px 8px 16px #bebebe, inset -8px -8px 16px #ffffff;
+      }
+
+      #video {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      #canvas {
+        display: none;
+      }
+
+      .video-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      /* Button */
+      .btn {
+        background: #e0e0e0;
+        border: none;
+        border-radius: 50px;
+        padding: 15px 40px;
+        font-size: 1.1em;
+        font-weight: 600;
+        color: #1a1a1a;
+        cursor: pointer;
+        margin: 20px auto;
+        display: block;
+        box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+        transition: all 0.3s ease;
+      }
+
+      .btn:hover {
+        box-shadow: 4px 4px 8px #bebebe, -4px -4px 8px #ffffff;
+      }
+
+      .btn:active {
+        box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+      }
+
+      .btn.active {
+        background: #8b4513;
+        color: #ffffff;
+        box-shadow: inset 4px 4px 8px #6d3410, inset -4px -4px 8px #a95516;
+      }
+
+      /* Results Panel */
+      .results-panel {
+        min-height: 400px;
+      }
+
+      .no-detection {
+        text-align: center;
+        color: #666;
+        padding: 40px;
+        font-size: 1.1em;
+      }
+
+      .detection-result {
+        margin-bottom: 20px;
+      }
+
+      .emotion-display {
+        background: #e0e0e0;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+      }
+
+      .emotion-main {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .emotion-label {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: #1a1a1a;
+      }
+
+      .emotion-confidence {
+        font-size: 1.3em;
+        color: #8b4513;
+        font-weight: 600;
+      }
+
+      /* Emotion Bars */
+      .emotion-bars {
+        margin-top: 15px;
+      }
+
+      .emotion-bar {
+        margin-bottom: 10px;
+      }
+
+      .emotion-bar-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        font-size: 0.9em;
+        color: #333;
+      }
+
+      .emotion-bar-bg {
+        background: #e0e0e0;
+        border-radius: 10px;
+        height: 20px;
+        overflow: hidden;
+        box-shadow: inset 2px 2px 4px #bebebe, inset -2px -2px 4px #ffffff;
+      }
+
+      .emotion-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #8b4513, #a0522d);
+        border-radius: 10px;
+        transition: width 0.3s ease;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Depression Analysis */
+      .depression-analysis {
+        background: #e0e0e0;
+        border-radius: 20px;
+        padding: 20px;
+        margin-top: 20px;
+        box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
+      }
+
+      .depression-title {
+        font-size: 1.2em;
+        color: #1a1a1a;
+        margin-bottom: 15px;
+        text-align: center;
+        font-weight: 600;
+      }
+
+      .risk-indicator {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        background: #e0e0e0;
+        border-radius: 15px;
+        box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+      }
+
+      .risk-level {
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+
+      .risk-percentage {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: #8b4513;
+      }
+
+      .risk-low {
+        color: #2d5016;
+      }
+
+      .risk-moderate {
+        color: #8b4513;
+      }
+
+      .risk-high {
+        color: #8b0000;
+      }
+
+      /* Status Messages */
+      .status-message {
+        text-align: center;
+        padding: 15px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        background: #e0e0e0;
+        box-shadow: inset 4px 4px 8px #bebebe, inset -4px -4px 8px #ffffff;
+      }
+
+      .status-waiting {
+        color: #666;
+      }
+
+      .status-detecting {
+        color: #8b4513;
+        font-weight: 600;
+      }
+
+      .status-error {
+        color: #8b0000;
+      }
+
+      /* Loading Animation */
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #e0e0e0;
+        border-radius: 50%;
+        border-top-color: #8b4513;
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Footer */
+      .footer {
+        text-align: center;
+        margin-top: 30px;
+        color: #666;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🎭 Facial Emotion Detection</h1>
+        <p>Real-time emotion recognition and mental health analysis</p>
+      </div>
+
+      <div class="main-content">
+        <!-- Video Section -->
+        <div class="card">
+          <h2 class="card-title">📹 Live Camera Feed</h2>
+          <div class="video-container">
+            <video id="video" autoplay playsinline></video>
+            <canvas id="canvas"></canvas>
+            <canvas id="overlay" class="video-overlay"></canvas>
+          </div>
+          <button id="startBtn" class="btn">Start Detection</button>
+        </div>
+
+        <!-- Results Section -->
+        <div class="card results-panel">
+          <h2 class="card-title">📊 Analysis Results</h2>
+          <div id="results">
+            <div class="status-message status-waiting">
+              <p>Click "Start Detection" to begin analyzing emotions</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>Powered by Swin Transformer | FER2013 Dataset</p>
+        <p>
+          ⚠️ This tool is for educational purposes only and should not replace
+          professional medical advice
+        </p>
+      </div>
+    </div>
+
+    <script>
+      const video = document.getElementById("video");
+      const canvas = document.getElementById("canvas");
+      const overlay = document.getElementById("overlay");
+      const startBtn = document.getElementById("startBtn");
+      const resultsDiv = document.getElementById("results");
+
+      let isDetecting = false;
+      let stream = null;
+      let detectionInterval = null;
+
+      // Start/Stop Detection
+      startBtn.addEventListener("click", async () => {
+        if (!isDetecting) {
+          await startDetection();
+        } else {
+          stopDetection();
+        }
+      });
+
+      async function startDetection() {
+        try {
+          // Request camera permission
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              width: { ideal: 640 },
+              height: { ideal: 480 },
+            },
+          });
+
+          video.srcObject = stream;
+
+          // Wait for video to be ready
+          await new Promise((resolve) => {
+            video.onloadedmetadata = () => {
+              resolve();
+            };
+          });
+
+          // Setup overlay canvas
+          overlay.width = video.videoWidth;
+          overlay.height = video.videoHeight;
+
+          isDetecting = true;
+          startBtn.textContent = "Stop Detection";
+          startBtn.classList.add("active");
+
+          resultsDiv.innerHTML = `
+                    <div class="status-message status-detecting">
+                        <div class="loading"></div>
+                        <p style="margin-top: 10px;">Detecting emotions...</p>
+                    </div>
+                `;
+
+          // Start detection loop
+          detectionInterval = setInterval(detectEmotion, 500);
+        } catch (error) {
+          console.error("Error accessing camera:", error);
+          resultsDiv.innerHTML = `
+                    <div class="status-message status-error">
+                        <p>❌ Camera access denied. Please allow camera permissions.</p>
+                    </div>
+                `;
+        }
+      }
+
+      function stopDetection() {
+        isDetecting = false;
+
+        if (detectionInterval) {
+          clearInterval(detectionInterval);
+          detectionInterval = null;
+        }
+
+        if (stream) {
+          stream.getTracks().forEach((track) => track.stop());
+          stream = null;
+        }
+
+        video.srcObject = null;
+
+        startBtn.textContent = "Start Detection";
+        startBtn.classList.remove("active");
+
+        resultsDiv.innerHTML = `
+                <div class="status-message status-waiting">
+                    <p>Detection stopped. Click "Start Detection" to resume.</p>
+                </div>
+            `;
+
+        // Clear overlay
+        const ctx = overlay.getContext("2d");
+        ctx.clearRect(0, 0, overlay.width, overlay.height);
+      }
+
+      async function detectEmotion() {
+        if (!isDetecting) return;
+
+        try {
+          // Capture frame from video
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(video, 0, 0);
+
+          // Convert to base64
+          const imageData = canvas.toDataURL("image/jpeg", 0.8);
+
+          // Send to server
+          const response = await fetch("/analyze_frame", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ image: imageData }),
+          });
+
+          const data = await response.json();
+
+          if (data.success && data.results.length > 0) {
+            displayResults(data.results);
+            drawOverlay(data.results);
+          } else {
+            resultsDiv.innerHTML = `
+                        <div class="no-detection">
+                            <p>👤 No face detected</p>
+                            <p style="font-size: 0.9em; margin-top: 10px;">Please position your face in front of the camera</p>
+                        </div>
+                    `;
+
+            // Clear overlay
+            const overlayCtx = overlay.getContext("2d");
+            overlayCtx.clearRect(0, 0, overlay.width, overlay.height);
+          }
+        } catch (error) {
+          console.error("Detection error:", error);
+        }
+      }
+
+      function displayResults(results) {
+        let html = "";
+
+        results.forEach((result, index) => {
+          const emotionBars = Object.entries(result.probabilities)
+            .map(
+              ([emotion, prob]) => `
+                        <div class="emotion-bar">
+                            <div class="emotion-bar-label">
+                                <span>${emotion}</span>
+                                <span>${prob}%</span>
+                            </div>
+                            <div class="emotion-bar-bg">
+                                <div class="emotion-bar-fill" style="width: ${prob}%"></div>
+                            </div>
+                        </div>
+                    `
+            )
+            .join("");
+
+          const riskClass =
+            result.depression.risk_level === "Low"
+              ? "risk-low"
+              : result.depression.risk_level === "Moderate"
+              ? "risk-moderate"
+              : "risk-high";
+
+          html += `
+                    <div class="detection-result">
+                        <div class="emotion-display">
+                            <div class="emotion-main">
+                                <span class="emotion-label">${result.emotion}</span>
+                                <span class="emotion-confidence">${result.confidence}%</span>
+                            </div>
+                            <div class="emotion-bars">
+                                ${emotionBars}
+                            </div>
+                        </div>
+                        
+                        <div class="depression-analysis">
+                            <div class="depression-title">🧠 Mental Health Indicator</div>
+                            <div class="risk-indicator">
+                                <span class="risk-level ${riskClass}">${result.depression.risk_level} Risk</span>
+                                <span class="risk-percentage">${result.depression.risk_percentage}%</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        });
+
+        resultsDiv.innerHTML = html;
+      }
+
+      function drawOverlay(results) {
+        const ctx = overlay.getContext("2d");
+        ctx.clearRect(0, 0, overlay.width, overlay.height);
+
+        results.forEach((result) => {
+          const { x, y, w, h } = result.bbox;
+
+          // Draw rectangle
+          ctx.strokeStyle = "#8B4513";
+          ctx.lineWidth = 3;
+          ctx.strokeRect(x, y, w, h);
+
+          // Draw label background
+          ctx.fillStyle = "#8B4513";
+          ctx.fillRect(x, y - 30, w, 30);
+
+          // Draw label text
+          ctx.fillStyle = "#ffffff";
+          ctx.font = "bold 16px Arial";
+          ctx.fillText(`${result.emotion} ${result.confidence}%`, x + 5, y - 8);
+        });
+      }
+
+      // Cleanup on page unload
+      window.addEventListener("beforeunload", () => {
+        if (stream) {
+          stream.getTracks().forEach((track) => track.stop());
+        }
+      });
+    </script>
+  </body>
+</html>

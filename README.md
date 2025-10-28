@@ -9,6 +9,78 @@ Welcome to the **Facial Expression Recognition (FER) for Mental Health Detection
 
 ---
 
+## 🚀 Quick Start for Team Members
+
+**New to this project?** Follow our comprehensive setup guide:
+
+👉 **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** - Complete instructions for getting started
+
+### Quick Setup (5 Steps)
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+cd YOUR_REPO_NAME
+
+# 2. Create virtual environment
+python -m venv .venv
+.venv\Scripts\activate  # Windows
+# source .venv/bin/activate  # macOS/Linux
+
+# 3. Install dependencies
+pip install -r web_requirements.txt
+
+# 4. Download the trained model from Hugging Face
+python download_model.py
+
+# 5. Run the web application
+python web_app.py
+```
+
+Open your browser at **http://localhost:5000** and start detecting emotions! 🎉
+
+---
+
+## 📦 Project Components
+
+This repository is organized into **two main parts**:
+
+### Part 1: Code Repository (GitHub)
+
+All source code, scripts, and documentation are hosted here on GitHub:
+
+- ✅ Web application (`web_app.py`)
+- ✅ Training scripts (`utilities/`)
+- ✅ Prediction scripts (`predict_*.py`)
+- ✅ Documentation and guides
+- ✅ UI templates
+
+### Part 2: Trained Model (Hugging Face)
+
+The trained model files are hosted on Hugging Face due to their large size:
+
+- 🤗 **Model Repository**: `https://huggingface.co/YOUR_USERNAME/MODEL_REPO_NAME`
+- 📥 **Download Script**: Use `python download_model.py` to automatically download
+- 📊 **Model Size**: ~400MB
+
+**Why separate?** Large model files (`.pth`) are not suitable for GitHub. We use Hugging Face for model hosting and GitHub for code, making it easy for team members to collaborate!
+
+---
+
+## 🌐 Web Application
+
+This project includes a **real-time facial expression recognition web application** with:
+
+- 📹 **Live Camera Detection**: Real-time emotion detection from your webcam
+- 🎨 **Neumorphism UI**: Beautiful soft UI design (black, white, brown colors)
+- 😊 **7 Emotion Classes**: Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise
+- 🧠 **Depression Risk Analysis**: Mental health risk assessment based on emotional patterns
+- ⚡ **Fast Performance**: Optimized for real-time processing
+
+**Documentation**: See [WEB_APP_README.md](./WEB_APP_README.md) for detailed web app documentation.
+
+---
+
 ## 📘 Overview of Facial Expression Recognition Techniques Using Python
 
 Mental health issues such as **anxiety**, **depression**, **OCD (Obsessive Compulsive Disorder)**, **PTSD (Post-Traumatic Stress Disorder)**, and other conditions significantly impact individuals and society. Early detection and intervention can drastically improve outcomes, and **Facial Expression Recognition (FER)** provides a non-invasive and efficient way to monitor emotional states.
@@ -27,29 +99,31 @@ This repository combines **Artificial Intelligence for Mental Health** with adva
 
 ---
 
-## 📂 AI for Mental Health Repository Structure
+## 📂 Repository Structure
 
 ```
 📦FER-for-Mental-Health-Detection
-├── 📁 Models
-│   ├── 📁 Swin_Transformer
-│   ├── 📁 Custom_CNN
-│   ├── 📁 ViT_Model
-│   └── 📁 Other_Models
-├── 📁 datasets
-├── 📁 images
+├── 📁 Models (Download from Hugging Face)
+│   └── 📁 Swin_Transformer
+│       └── best_model.pth (use download_model.py)
+├── 📁 templates
+│   └── index.html (Web UI)
 ├── 📁 utilities
-├── 📄 README.md
-├── 📄 usage_guide.md
-├── 📄 LICENSE
-└── 📄 requirements.txt
+│   ├── train_model.py
+│   ├── evaluate_model.py
+│   └── preprocess_data.py
+├── 📁 images (Visualizations)
+├── 📄 web_app.py (Flask web application)
+├── 📄 download_model.py (Download model from Hugging Face)
+├── 📄 upload_model.py (Upload model to Hugging Face)
+├── 📄 predict_single_image.py
+├── 📄 predict_webcam.py
+├── 📄 SETUP_GUIDE.md (Team setup instructions)
+├── 📄 WEB_APP_README.md (Web app documentation)
+├── 📄 README.md (This file)
+├── 📄 requirements.txt (Training dependencies)
+└── 📄 web_requirements.txt (Web app dependencies)
 ```
-
-- **Models**: Contains different subfolders for Swin Transformer, Custom CNN, ViT, and other models.
-- **datasets**: Includes FER2013, CK+, and Genius HR datasets.
-- **images**: Visualizations such as Grad-CAM, architecture diagrams, and augmented samples.
-- **utilities**: Scripts for data preprocessing, augmentation, and evaluation.
-- **usage_guide.md**: Detailed guide to using the models.
 
 ---
 
@@ -72,135 +146,85 @@ This repository combines **Artificial Intelligence for Mental Health** with adva
 
 ---
 
-## 🚀 Emotion Detection Using Python Installation
+## 🚀 Installation
 
-### Prerequisites
+### For Web Application Users (Recommended)
 
-- Python 3.10+
-- PyTorch 2.0+
-- CUDA-enabled GPU (recommended)
+If you just want to use the web application:
 
-### Installation Steps
+1. **Clone the repository**
 
-Follow these detailed steps to set up the project and avoid any errors during installation.
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+   cd YOUR_REPO_NAME
+   ```
 
----
+2. **Create virtual environment**
 
-#### 1. Clone the Repository
+   ```bash
+   python -m venv .venv
+   .venv\Scripts\activate  # Windows
+   # source .venv/bin/activate  # macOS/Linux
+   ```
 
-Start by cloning the repository to your local machine and navigate into the project directory:
+3. **Install web dependencies**
 
-```bash
-# Clone the repository
-git clone https://github.com/mujiyantosvc/Facial-Expression-Recognition-FER-for-Mental-Health-Detection-.git
+   ```bash
+   pip install -r web_requirements.txt
+   ```
 
-# Navigate into the project directory
-cd Facial-Expression-Recognition-FER-for-Mental-Health-Detection-
-```
+4. **Download the model**
 
----
+   ```bash
+   python download_model.py
+   ```
 
-#### 2. Create a Virtual Environment
+   Enter your Hugging Face repository ID when prompted.
 
-It is highly recommended to use a virtual environment to manage dependencies. Run the following commands based on your operating system:
+5. **Run the application**
+   ```bash
+   python web_app.py
+   ```
 
-```bash
-# For Linux/MacOS
-python3 -m venv venv
-source venv/bin/activate
+### For Model Training (Advanced)
 
-# For Windows
-python -m venv venv
-.\venv\Scripts\activate
-```
+If you want to train models from scratch:
 
----
+1. Follow steps 1-2 above
 
-#### 3. Update pip and Install Dependencies
+2. **Install training dependencies**
 
-Ensure your `pip` is up-to-date and install all required dependencies listed in `requirements.txt`:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-```bash
-pip install --upgrade pip
-pip install -r requirements.txt
-```
+3. **Download FER2013 dataset**
 
----
+   ```bash
+   # Option A: Using Kaggle CLI
+   pip install kaggle
+   kaggle competitions download -c challenges-in-representation-learning-facial-expression-recognition-challenge -p datasets
 
-#### 4. Verify Installation
+   # Option B: Manual download from Kaggle
+   # Place fer2013.csv in fer2013/ folder
+   ```
 
-To confirm that everything is installed correctly, run the following commands:
+4. **Preprocess the dataset**
 
-```bash
-# Check Python version
-python --version
-# Output should be Python 3.10+
+   ```bash
+   python utilities/preprocess_data.py
+   ```
 
-# Check PyTorch installation
-python -c "import torch; print(torch.__version__)"
-# Output should match the PyTorch version specified in requirements.txt
-```
+5. **Train the model**
 
----
+   ```bash
+   python utilities/train_model.py --model swin_transformer --epochs 10 --batch_size 32
+   ```
 
-#### 5. Download the FER2013 Dataset
-
-This project uses the FER2013 dataset. Follow these steps to download and prepare the dataset:
-
-```bash
-# Install Kaggle CLI
-pip install kaggle
-
-# Move your Kaggle API token to the appropriate location
-mkdir ~/.kaggle
-mv /path/to/kaggle.json ~/.kaggle/
-chmod 600 ~/.kaggle/kaggle.json
-
-# Download the FER2013 dataset
-kaggle competitions download -c challenges-in-representation-learning-facial-expression-recognition-challenge
-
-# Extract the dataset into the datasets/ folder
-mkdir datasets
-unzip challenges-in-representation-learning-facial-expression-recognition-challenge.zip -d datasets
-```
-
----
-
-#### 6. Preprocess the Dataset
-
-Organize the dataset into train, validation, and test directories:
-
-```bash
-python utilities/preprocess_data.py
-```
-
----
-
-#### 7. Run the Model
-
-To ensure everything is working, run the default Swin Transformer model training script:
-
-```bash
-python utilities/train_model.py --model swin_transformer --epochs 10 --batch_size 32
-```
-
-This command trains the Swin Transformer model on the FER2013 dataset with default settings.
-
----
-
-### Troubleshooting
-
-If you encounter issues during installation:
-
-- **CUDA errors**: Ensure you have the correct version of CUDA installed.
-- **Dependency conflicts**: Manually resolve versions in `requirements.txt`.
-- **Dataset errors**: Verify that the FER2013 dataset is correctly downloaded and extracted.
-
----
-
-### Installation Complete!
-
-You are now ready to explore Facial Expression Recognition for Mental Health Detection. For more information, refer to the [Usage Guide](./usage_guide.md).
+6. **Upload to Hugging Face (Optional)**
+   ```bash
+   python upload_model.py
+   ```
 
 ---
 
@@ -244,7 +268,7 @@ You are now ready to explore Facial Expression Recognition for Mental Health Det
 
 ![Grad-CAM Visualization](./images/facial-emotion-recognition-grad-cam-visualizations.jpg)
 
-- Highlights the facial regions influencing the model’s predictions.
+- Highlights the facial regions influencing the model's predictions.
 
 ### Mental Health Scoring Summary
 
@@ -263,6 +287,18 @@ You are now ready to explore Facial Expression Recognition for Mental Health Det
 - **Human Resources**: Monitor and assess employee mental health using **AI for mental health detection**.
 - **Healthcare**: Real-time emotion detection for early mental health interventions.
 - **Research**: Advance the field of **artificial intelligence in mental health detection**.
+- **Education**: Mental health monitoring for students.
+- **Customer Service**: Emotion-aware customer interaction systems.
+
+---
+
+## 🔗 Important Links
+
+- **GitHub Repository**: This repository
+- **Hugging Face Model**: `https://huggingface.co/YOUR_USERNAME/MODEL_REPO_NAME`
+- **Setup Guide**: [SETUP_GUIDE.md](./SETUP_GUIDE.md)
+- **Web App Documentation**: [WEB_APP_README.md](./WEB_APP_README.md)
+- **Research Paper**: [DOI: 10.48084/etasr.9139](https://doi.org/10.48084/etasr.9139)
 
 ---
 
@@ -296,5 +332,15 @@ For questions or support, please contact:
 
 ### Special Credit
 
-- **Description**: Indonesia  artificial intelligence AI Developer | Website Developer | Mobile Developer | Software Developer | Software House Indonesia
+- **Description**: Indonesia artificial intelligence AI Developer | Website Developer | Mobile Developer | Software Developer | Software House Indonesia
 - **Reference**: [Second Vision Corp](https://secondvisioncorp.com/)
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+**⭐ If you find this project helpful, please star the repository!**

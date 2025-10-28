@@ -1,2 +1,69 @@
 # Ignore macOS system files
 .DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Model Files (Large files - hosted on Hugging Face)
+Models/
+*.pth
+*.pt
+*.ckpt
+*.h5
+*.pkl
+
+# Dataset Files (Large files)
+datasets/
+FER2013_processed/
+fer2013/
+*.csv
+*.zip
+*.tar.gz
+*.tar
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs
+*.log
+logs/
+
+# Cache
+.cache/
+*.cache
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Temporary files
+*.tmp
+*.temp
+README_HF.md
+config.json
+
+# Environment variables
+.env
+.env.local
