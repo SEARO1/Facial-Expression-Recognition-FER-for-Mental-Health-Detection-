@@ -19,7 +19,7 @@ Welcome to the **Facial Expression Recognition (FER) for Mental Health Detection
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+git clone https://github.com/SEARO1/Facial-Expression-Recognition-FER-for-Mental-Health-Detection-
 cd YOUR_REPO_NAME
 
 # 2. Create virtual environment
