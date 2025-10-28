@@ -30,7 +30,7 @@ python -m venv .venv
 # 3. Install dependencies
 pip install -r web_requirements.txt
 
-# 4. Download the trained model from Hugging Face
+# 4. Download the trained model from Hugging Face&&Enter repo id: SEARO1/FER_model
 python download_model.py
 
 # 5. Run the web application
