@@ -20,7 +20,7 @@ Welcome to the **Facial Expression Recognition (FER) for Mental Health Detection
 ```bash
 # 1. Clone the repository
 git clone https://github.com/SEARO1/Facial-Expression-Recognition-FER-for-Mental-Health-Detection-
-cd YOUR_REPO_NAME
+cd Facial-Expression-Recognition-FER-for-Mental-Health-Detection-
 
 # 2. Create virtual environment
 python -m venv .venv
@@ -133,98 +133,6 @@ This repository combines **Artificial Intelligence for Mental Health** with adva
 
 - **Description**: A dataset of 35,887 grayscale images labeled with seven emotions (Angry, Disgust, Fear, Happy, Sad, Surprise, Neutral).
 - **Source**: [FER2013 on Kaggle](https://www.kaggle.com/c/challenges-in-representation-learning-facial-expression-recognition-challenge).
-
-### CK+
-
-- **Description**: A smaller dataset of 920 images with eight emotion labels.
-- **Source**: [CK+ Dataset Official Site](https://www.jeffcohn.net/Resources/).
-
-### Genius HR Dataset
-
-- **Description**: A real-world dataset for workplace mental health analysis.
-- **Source**: Proprietary dataset. Contact for access.
-
----
-
-## 🚀 Installation
-
-### For Web Application Users (Recommended)
-
-If you just want to use the web application:
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-   cd YOUR_REPO_NAME
-   ```
-
-2. **Create virtual environment**
-
-   ```bash
-   python -m venv .venv
-   .venv\Scripts\activate  # Windows
-   # source .venv/bin/activate  # macOS/Linux
-   ```
-
-3. **Install web dependencies**
-
-   ```bash
-   pip install -r web_requirements.txt
-   ```
-
-4. **Download the model**
-
-   ```bash
-   python download_model.py
-   ```
-
-   Enter your Hugging Face repository ID when prompted.
-
-5. **Run the application**
-   ```bash
-   python web_app.py
-   ```
-
-### For Model Training (Advanced)
-
-If you want to train models from scratch:
-
-1. Follow steps 1-2 above
-
-2. **Install training dependencies**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Download FER2013 dataset**
-
-   ```bash
-   # Option A: Using Kaggle CLI
-   pip install kaggle
-   kaggle competitions download -c challenges-in-representation-learning-facial-expression-recognition-challenge -p datasets
-
-   # Option B: Manual download from Kaggle
-   # Place fer2013.csv in fer2013/ folder
-   ```
-
-4. **Preprocess the dataset**
-
-   ```bash
-   python utilities/preprocess_data.py
-   ```
-
-5. **Train the model**
-
-   ```bash
-   python utilities/train_model.py --model swin_transformer --epochs 10 --batch_size 32
-   ```
-
-6. **Upload to Hugging Face (Optional)**
-   ```bash
-   python upload_model.py
-   ```
 
 ---
 
